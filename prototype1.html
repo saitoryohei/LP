@@ -6,11 +6,11 @@
 <title>湘南AI企画</title>
 <style>
   :root {
-    /* 背景が暗くなるため、メインカラーを白ベースに反転 */
-    --primary-color: #ffffff;
-    --accent-color: #5ABEE6; /* ご指定のライトブルー */
-    --text-main: #f8fafc;
-    --text-light: rgba(255, 255, 255, 0.85);
+    --primary-color: #333333;
+    --accent-color: #5ABEE6;
+    --bg-color: #f8fafc;
+    --text-main: #334155;
+    --text-light: #64748b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,35 +18,8 @@
   body {
     font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     color: var(--text-main);
+    background-color: var(--bg-color);
     line-height: 1.8;
-    position: relative;
-    /* 本文に影をつけて、画像の上でも読みやすくする */
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-  }
-
-  /* =========================================
-     【最重要】背景画像の全画面固定（iOS対応の堅牢な書き方）
-  ========================================= */
-  body::before {
-    content: '';
-    position: fixed;git 
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background-image: url('images/main-bg.png');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    z-index: -2; /* 一番奥に配置 */
-  }
-
-  /* 背景画像全体を少し暗くして、白文字を際立たせるオーバーレイ */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(20, 25, 30, 0.75); /* 画像全体に薄い黒のフィルムを被せる */
-    z-index: -1;
   }
 
   h1, h2, h3 {
@@ -61,85 +34,70 @@
     padding: 0 5%;
   }
 
-  /* =========================================
-     ヘッダー（透明感のあるダークグラス仕様）
-  ========================================= */
   header {
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px); /* 後ろの画像をぼかす */
-    -webkit-backdrop-filter: blur(10px);
+    background: #fff;
     padding: 20px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
   }
 
+/* 修正後：構造に一致した正しいCSS */
   .logo {
     display: flex;
     align-items: center;
     font-size: 1.5rem;
     font-weight: bold;
     letter-spacing: 0.1em;
-    color: #fff;
+    color: var(--primary-color);
     text-decoration: none;
-    text-shadow: none;
   }
 
   .logo img {
-    height: 6rem;
+    height: 6rem; /* 【これで確実に効きます】文字と同じ高さ（約24px）に縮小 */
     width: auto;
     margin-right: 16px;
     display: block;
-    /* ロゴ画像（黒文字等の場合）が見えるよう必要に応じて白くする処理 */
-    /* filter: brightness(0) invert(1); */ 
   }
 
   /* =========================================
-     ファーストビュー（背景指定を削除し、レイアウトのみに）
+     ファーストビュー（hero）のレイアウト制御
   ========================================= */
-  .hero-fullscreen {
-    width: 100%;
-    height: calc(100vh - 120px); 
-    min-height: 500px;
-    display: flex;
-    align-items: center;
+  .hero {
+    padding: 100px 0 80px;
+    background: linear-gradient(135deg, #fff 0%, #e2e8f0 100%);
   }
 
-  .hero-text-block {
-    padding: 40px 0;
-    width: fit-content;
-    margin: 0 auto;
-    text-align: left;
-    animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
-    transform: translateY(30px);
+  /* ここがキモ：ブロックを文字幅に合わせ、中央配置し、中身を左詰めにする */
+  .hero-lock {
+    width: fit-content; /* h1かpの長い方の幅にブロックサイズを合わせる */
+    margin: 0 auto;     /* そのブロック全体を画面の中央に配置 */
+    text-align: left;   /* 中の文字はすべて左詰めにし、縦のラインを揃える */
   }
 
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-text-block h1 {
+  .hero h1 {
     font-size: 2.8rem;
     line-height: 1.4;
     margin-bottom: 24px;
     letter-spacing: 0.05em;
   }
 
-  .hero-text-block p {
+  .hero p {
     font-size: 1.1rem;
     color: var(--text-light);
+    line-height: 1.8;
   }
 
-  .comma-pc { display: inline; }
+  .comma-pc { display: inline; } /* PCでは読点を表示 */
+
 
   /* =========================================
-     リード文（白背景を撤廃し、文字だけに）
+     リード文（lead）のレイアウト制御
   ========================================= */
   .lead {
     padding: 80px 0;
-    /* background: #fff; を削除 */
+    background: #fff;
   }
 
   .lead h2 { 
@@ -153,6 +111,7 @@
   .lead p { 
     font-size: 1.05rem; 
     line-height: 2; 
+    color: var(--text-main);
   }
 
   .text-lock.lead-lock {
@@ -163,52 +122,60 @@
   }
 
   /* =========================================
-     安心宣言（カードの箱を撤廃し、文字だけに）
+     安心宣言（declarations）のカードレイアウト
   ========================================= */
   .declarations {
-    padding: 100px 0 150px;
+    padding: 80px 0;
   }
 
   .declarations h2 {
     text-align: center;
     font-size: 2.2rem;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
   }
 
   .card-stack {
     display: flex;
     flex-direction: column;
-    gap: 60px; /* 余白を広げて読みやすく */
+    gap: 40px;
     max-width: 760px;
     margin: 0 auto;
   }
 
-  /* カードデザインを解除し、シンプルなテキストブロックへ */
   .card {
     position: relative;
-    padding: 10px 0 10px 25px;
-    border-left: 4px solid var(--accent-color); /* 左の青線だけ残す */
+    overflow: hidden;
+    background: #fff;
+    padding: 40px 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02), 0 10px 15px rgba(0,0,0,0.03);
+    border-left: 6px solid var(--accent-color);
   }
 
   .card::before {
     content: attr(data-num);
     position: absolute;
-    top: -50px;
-    right: 0;
-    font-size: 12rem;
+    top: -30px;
+    right: -10px;
+    font-size: 10rem;
     font-weight: 900;
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    color: rgba(255, 255, 255, 0.05); /* 透かし文字を白に変更 */
+    color: rgba(37, 99, 235, 0.03);
     line-height: 1;
     pointer-events: none;
-    z-index: -1;
+    z-index: 1;
+  }
+
+  .card span, .card h3, .card p {
+    position: relative;
+    z-index: 2;
   }
 
   .card-number {
     display: inline-block;
     font-size: 0.95rem;
     letter-spacing: 0.15em;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-weight: bold;
     color: var(--accent-color);
   }
@@ -216,29 +183,26 @@
   .card h3 {
     font-size: 1.4rem;
     line-height: 1.5;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
   }
 
   .card p {
     font-size: 1rem;
     color: var(--text-light);
+    line-height: 1.8;
   }
 
-  /* =========================================
-     フッター（シネマティックに合わせた半透明ダーク）
-  ========================================= */
   footer {
-    background: rgba(0, 0, 0, 0.6); /* ご指定の黄緑はトーンが合わないためダークに変更 */
-    backdrop-filter: blur(5px);
+    background: #B4D750;
     color: #fff;
     text-align: center;
     padding: 40px 0;
     font-size: 0.9rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
   }
 
   /* =========================================
-     レスポンシブ
+     レスポンシブ（PC・スマホの改行・サイズ制御）
   ========================================= */
   @media (min-width: 769px) {
     .br-sp { display: none; }
@@ -248,16 +212,17 @@
   @media (max-width: 768px) {
     .br-pc { display: none; }
     .br-sp { display: block; }
+
+    /* スマホで読点を消す */
     .comma-pc { display: none; }
 
-    .hero-text-block { width: 90%; padding: 20px 0; }
-    .hero-text-block h1 { font-size: 1.8rem; line-height: 1.5; }
-    .hero-text-block p { font-size: 1rem; }
-    
+    /* スマホ用のフォントサイズ・余白調整 */
+    .hero h1 { font-size: 1.8rem; line-height: 1.5; }
+    .hero p { font-size: 1rem; }
     .lead h2 { font-size: 1.5rem; padding-left: 10px; }
     
-    .card { padding: 10px 0 10px 15px; }
-    .card::before { font-size: 8rem; top: -30px; }
+    .card { padding: 30px 20px; }
+    .card::before { font-size: 7rem; top: -10px; }
     .card h3 { font-size: 1.2rem; }
   }
 </style>
@@ -271,9 +236,9 @@
   </div>
 </header>
 
-<section class="hero-fullscreen">
-  <div class="container" style="width: 100%;">
-    <div class="hero-text-block">
+<section class="hero">
+  <div class="container">
+    <div class="text-lock hero-lock">
       <h1>Webページ・SNS動画を<span class="comma-pc">、</span><br class="br-pc"><br class="br-sp">適正価格で<span class="comma-pc">、</span><br class="br-sp">より早く。</h1>
       <p>最新のテクノロジーを活用し、<br class="br-sp">地域企業様のビジュアルをサポートする<br class="br-sp">デザインパートナーです。</p>
     </div>
